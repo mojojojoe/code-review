@@ -25,11 +25,13 @@ SMS_store = []
 user_choice = ""
 
 while userChoice != "quit":
-user_choice = raw_input("What would you like to do -
+    user_choice = raw_input("What would you like to do -
 read/send/quit?")
-if user_choice == "read":
-# Place your logic here elif user_choice == "send": #
-Place your logic here elif user_choice == "quit":
-print("Goodbye")
-else:
-print("Oops - incorrect input")
+    if user_choice == "read":
+# Place your logic here
+    elif user_choice == "send": #
+        #Place your logic here
+    elif user_choice == "quit":
+        print("Goodbye")
+    else:
+        print("Oops - incorrect input")
