@@ -43,3 +43,5 @@ print("Oops - incorrect input")
 - noticed that the while control structure and contents needed to be properly formatted
 - reviewed function stubs. stubs lacked "pass" method. Placed them in the SMSMessage class but on assessment, it feels like there should be another class called SMSMessageList. Leave that for next step though.
 - just noticed that class constructor has variable definitions in wrong direction. Values fed into the constructor should be used to populate the class fields, not the other way around...corrected this.
+- added the SMSMessageList class to hold an different set of functions for use with the SMS storage list. This would then house the get_message, get_unread_messages, get_count and add_sms functions
+

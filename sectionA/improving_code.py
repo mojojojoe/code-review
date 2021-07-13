@@ -3,7 +3,8 @@ messageText = text
 fromNumber = number
 
 class SMSMessage():
-    """ A class whose object holds an SMS message"""
+    """ A class whose object holds an SMS message
+    and whose functions work on that message """
     
     def __init__(self,has_been_read,message_text,from_number):
         self.has_been_read = False
@@ -11,8 +12,10 @@ class SMSMessage():
         self.cell_num = from_number
 
     def mark_as_read(self):
-        pass
+        self.has_been_read = True
 
+    
+class SMSMessageList():    
     def add_sms():
         pass
     
@@ -23,12 +26,11 @@ class SMSMessage():
         pass
     
     def get_unread_messages():
-        pass
+        pass    
 
     def remove():
         pass
 
-    
 if user_choice == read:
 self.has_been_read = True
 
