@@ -38,4 +38,5 @@ print("Oops - incorrect input")
 *REVIEW*
 
 - variable assignments on the same line (see lines 1 & 16) (first commit)
+- class needs to be defined - did this with basic constructor (second commit)
 - 
