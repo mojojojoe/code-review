@@ -42,3 +42,4 @@ print("Oops - incorrect input")
 - added initial commentary/documenation on class def. I noticed that there is an inconsistency of style in variable nameing between cameltoe style and underscore style. Decided to use the underscore style throughout, except for class names.
 - noticed that the while control structure and contents needed to be properly formatted
 - reviewed function stubs. stubs lacked "pass" method. Placed them in the SMSMessage class but on assessment, it feels like there should be another class called SMSMessageList. Leave that for next step though.
+- just noticed that class constructor has variable definitions in wrong direction. Values fed into the constructor should be used to populate the class fields, not the other way around...corrected this.
