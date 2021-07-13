@@ -44,4 +44,7 @@ print("Oops - incorrect input")
 - reviewed function stubs. stubs lacked "pass" method. Placed them in the SMSMessage class but on assessment, it feels like there should be another class called SMSMessageList. Leave that for next step though.
 - just noticed that class constructor has variable definitions in wrong direction. Values fed into the constructor should be used to populate the class fields, not the other way around...corrected this.
 - added the SMSMessageList class to hold an different set of functions for use with the SMS storage list. This would then house the get_message, get_unread_messages, get_count and add_sms functions
+- created the SMSMessageList class constructor and placed the SMS_store and user_choice variables inside this.
+- realise that the classes will need to be instantiated and that this will help me finish off the SMS classes as it will give me a better conceptual understanding of what needs to be done. So, starting work on instantiating SMSMessageList class. 
+- in instantiating SMSMessageList, an App class was defined as the object to contain the app. In getting the code to run the first 3 lines had to be cleaned up, as they are unnecessary. Also, a shebang line needed to be added to make the script runnable on its own.
 
