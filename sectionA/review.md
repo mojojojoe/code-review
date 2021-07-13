@@ -39,4 +39,5 @@ print("Oops - incorrect input")
 
 - variable assignments on the same line (see lines 1 & 16) (first commit)
 - class needs to be defined - did this with basic constructor (second commit)
+- added initial commentary/documenation on class def. I noticed that there is an inconsistency of style in variable nameing between camel toe style and underscore style. Decided to use the underscore style throughout, except for class names.
 - 

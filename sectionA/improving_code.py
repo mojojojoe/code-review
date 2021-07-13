@@ -3,13 +3,15 @@ messageText = text
 fromNumber = number
 
 class SMSMessage():
-    def __init__(self,hasBeenRead,messageText,fromNumber):
-        self.hasBeenRead = False self.messageText = text
-        self.fromNumber = number
-        def MarkASRead(self):
+    """ A class whose object holds an SMS message"""
+    
+    def __init__(self,has_been_read,message_text,from_number):
+        self.has_been_read = False self.message_text = text
+        self.from_number = number
+        def mark_as_read(self):
             
-if userChoice == read:
-self.hasBeenRead = True
+if user_choice == read:
+self.has_been_read = True
 def add_sms():
 def get_count():
 def get_message():
@@ -19,15 +21,15 @@ no_1 = SMSMessage(False, "Hello", "0798653452")
 no_2 = SMSMessage(False, "WYD", "0845673864")
 no_3 = SMSMessage(False, "How are you?", "0631873298")
 
-SMSStore = []
-userChoice = ""
+SMS_store = []
+user_choice = ""
 
 while userChoice != "quit":
-userChoice = raw_input("What would you like to do -
+user_choice = raw_input("What would you like to do -
 read/send/quit?")
-if userChoice == "read":
-# Place your logic here elif userChoice == "send": #
-Place your logic here elif userChoice == "quit":
+if user_choice == "read":
+# Place your logic here elif user_choice == "send": #
+Place your logic here elif user_choice == "quit":
 print("Goodbye")
 else:
 print("Oops - incorrect input")
