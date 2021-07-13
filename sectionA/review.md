@@ -39,6 +39,6 @@ print("Oops - incorrect input")
 
 - variable assignments on the same line (see lines 1 & 16) (first commit)
 - class needs to be defined - did this with basic constructor (second commit)
-- added initial commentary/documenation on class def. I noticed that there is an inconsistency of style in variable nameing between camel toe style and underscore style. Decided to use the underscore style throughout, except for class names.
+- added initial commentary/documenation on class def. I noticed that there is an inconsistency of style in variable nameing between cameltoe style and underscore style. Decided to use the underscore style throughout, except for class names.
 - noticed that the while control structure and contents needed to be properly formatted
-- 
+- reviewed function stubs. stubs lacked "pass" method. Placed them in the SMSMessage class but on assessment, it feels like there should be another class called SMSMessageList. Leave that for next step though.
