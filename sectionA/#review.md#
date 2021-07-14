@@ -1,6 +1,6 @@
 *Option 1: Python*
 
-Student Question
+**Student Question**
 Hi there,
 I'm having a bit of an issue with figuring out how to exactly implement the class
 methods so that I may call them outside of the class when trying to create a new
@@ -8,7 +8,7 @@ SMS object.
 Thanks,
 Student
 
-# An SMS Simulation class SMSMessage(object):
+*_An SMS Simulation class_* SMSMessage(object):
 hasBeenRead = False messageText = text fromNumber = number
 def __init__(self,hasBeenRead,messageText,fromNumber):
 self.hasBeenRead = False self.messageText = text

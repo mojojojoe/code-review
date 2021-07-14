@@ -1,0 +1,144 @@
+Python 3.8.5 (default, Sep  4 2020, 07:30:14) 
+[GCC 7.3.0] :: Anaconda, Inc. on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> python.el: native completion setup loaded
+>>> app
+<__main__.App object at 0x7f8638e19430>
+>>> app()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'App' object is not callable
+>>> app = App
+>>> app()
+<__main__.App object at 0x7f8638c02400>
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: main() missing 1 required positional argument: 'self'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: main() missing 1 required positional argument: 'self'
+>>> app
+<class '__main__.App'>
+>>> app()
+<__main__.App object at 0x7f8638c02400>
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: main() missing 1 required positional argument: 'self'
+>>> main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'main' is not defined
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: main() missing 2 required positional arguments: 'self' and 'arg'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: main() missing 2 required positional arguments: 'self' and 'arg'
+>>>   C-c C-c
+KeyboardInterrupt
+>>>   C-c C-c
+KeyboardInterrupt
+>>> app
+<class '__main__.App'>
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 69, in main
+    no_1 = SMSMessage(False,"Hello","0798653452")
+TypeError: __init__() takes 3 positional arguments but 4 were given
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 72, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 37, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in plus1
+    count + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 72, in main
+    sms_list = SMSMessageList()
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 37, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in plus1
+    me + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 76, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 37, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in plus1
+    me + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 73, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 38, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in plus1
+    me + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 73, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 38, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in plus1
+    me + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 73, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 38, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in plus1
+    me + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 73, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 38, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 36, in plus1
+    count + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 73, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 38, in add
+    self.SMS_store[plus1(count)]  = sms #idx of 1 if empty
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 36, in plus1
+    count + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> len([])
+0
+>>> app.main()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 71, in main
+    sms_list.add(no_1)
+  File "/home/boris/dev/my-dev/code-review/sectionA/improving_code.py", line 35, in add
+    inc = count + 1 # equals 0 if empty
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+>>> 
