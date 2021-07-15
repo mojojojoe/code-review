@@ -1,0 +1,11 @@
+	language	python	ruby	java	javascript	jupyter
+section	A		x	x	x	x		
+section B			x	x	x		x
+
+
+
+Choices
+section A opttion 1 Python
+section B option 2 Data Science R 
+section C option 1 implement K-means algorithm Julia
+section D option 2 time complexity
