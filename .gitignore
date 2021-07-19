@@ -1,2 +1,4 @@
 output
 *~
+.Rproj*
+sectionB/.ipynb_checkpoints/*

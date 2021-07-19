@@ -1,0 +1,1358 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{analysis}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{corporate-takeovers-in-africa-2016-2021}{%
+\section{Corporate takeovers in Africa
+(2016-2021)}\label{corporate-takeovers-in-africa-2016-2021}}
+
+    The data was aquired from Refinitiv for a legal firm in South Africa. It
+reflects all corporate takeovers across Africa from 2016 onwards. There
+is no quantitative data. The information is a listing containing the
+names of the target and aquiror companies, their sectors and nation of
+domicile. The analysis is done by differing groupings of the 6
+categories and counting takeover listings (line numbers).
+
+    This notebook is written in R. The libraries used are loaded first.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{tidyverse}\PY{p}{)}\PY{p}{;}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{Rgraphviz}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+── \textbf{Attaching packages} ─────────────────────────────────────── tidyverse
+1.3.1 ──
+
+\textcolor{ansi-green}{✔} \textcolor{ansi-blue}{ggplot2} 3.3.3     \textcolor{ansi-green}{✔} \textcolor{ansi-blue}{purrr  } 0.3.4
+\textcolor{ansi-green}{✔} \textcolor{ansi-blue}{tibble } 3.1.1     \textcolor{ansi-green}{✔} \textcolor{ansi-blue}{dplyr  } 1.0.5
+\textcolor{ansi-green}{✔} \textcolor{ansi-blue}{tidyr  } 1.1.3     \textcolor{ansi-green}{✔} \textcolor{ansi-blue}{stringr} 1.4.0
+\textcolor{ansi-green}{✔} \textcolor{ansi-blue}{readr  } 1.4.0     \textcolor{ansi-green}{✔} \textcolor{ansi-blue}{forcats} 0.5.1
+
+── \textbf{Conflicts} ──────────────────────────────────────────
+tidyverse\_conflicts() ──
+\textcolor{ansi-red}{✖} \textcolor{ansi-blue}{dplyr}::\textcolor{ansi-green}{filter()} masks \textcolor{ansi-blue}{stats}::filter()
+\textcolor{ansi-red}{✖} \textcolor{ansi-blue}{dplyr}::\textcolor{ansi-green}{lag()}    masks \textcolor{ansi-blue}{stats}::lag()
+
+Loading required package: graph
+
+Loading required package: BiocGenerics
+
+Loading required package: parallel
+
+
+Attaching package: ‘BiocGenerics’
+
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+
+The following objects are masked from ‘package:dplyr’:
+
+    combine, intersect, setdiff, union
+
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which, which.max, which.min
+
+
+
+Attaching package: ‘graph’
+
+
+The following object is masked from ‘package:stringr’:
+
+    boundary
+
+
+Loading required package: grid
+
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Then} \PY{n}{the} \PY{n}{data} \PY{n}{is} \PY{n}{loaded.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{readxl}\PY{o}{::}\PY{n+nf}{read\PYZus{}xls}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{resources/data.xls\PYZdq{}}\PY{p}{)}\PY{p}{;}\PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A tibble: 230 × 30
+\begin{tabular}{lllllllllllllllllllll}
+ DateAnnounced & DateEffective & Target.nam & Target.nat & Target.sector & Target & Target.desc & Acquiror.nam & Acquiror.nat & Acquiror.sec & ⋯ & Target
+Macro
+Industry & Acquiror
+Macro
+Industry & Investor & Investor
+Immediate
+Parent
+Name & Investor
+Ultimate
+Parent
+Name & Seller
+Immediate
+Parent
+Name & Seller
+Ultimate
+Parent
+Name & Acquisition Technique & Form & Master
+ Deal
+ Type\\
+ <dttm> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & ⋯ & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr>\\
+\hline
+	 2021-04-27 & 44313 & Dragonfly Aerospace         & South Africa & Telecommunications Equipment & -                                     & Dragonfly Aerospace is a
+manufacturer of wireless
+communications equipment.
+The company design and build
+compact high-performance
+imaging payloads and
+satellites. The Company is
+located in Stellenbosch,
+South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              & Max Polyakov                  & Ukraine        & Other Financials                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. of Assets  & IMA\\
+	 2021-04-20 & -     & Adapt IT Holdings Ltd       & South Africa & IT Consulting \& Services     & -                                     & Adapt IT Holdings Ltd is a
+provider of computer systems
+design services. The
+Company's principal
+activity is providing
+software development
+solutions using Oracle and
+Java technology. It focuses
+on internet solution
+environment, utilizing a
+variety of development tools
+and techniques to deliver
+web-based solutions
+providing clients with
+internet connectivity and
+internet-related software
+products. The Company's
+core skills are focused on
+Oracle Designer, Developer
+and Database technology,
+including Java/J2EE and
+Headstart. Its software
+product brands are
+Tranquility, Canelab,
+DevMan, ApplyIT,
+IntelliPERMIT, FlexiLOG,
+SmartSURE and OptiRUN. The
+Company was founded in 1996
+and is located in Midrand,
+South Africa. & Blacksheep Master Fund Ltd    & Cayman Islands & Other Financials                  & ⋯ & High Technology    & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. Maj. Int.  & IMA\\
+	 2021-04-19 & -     & Millicom Tanzania Ltd       & Tanzania     & Wireless                     & -                                     & Millicom Tanzania Ltd,
+located in Dar es Salaam,
+Tanzania, provides wireless
+telecommunications services.
+It provides prepaid cellular
+services in 13 markets in
+Africa and Latin America. It
+has more than 30 million
+customers. The Company was
+founded in 1994.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   & Axian Group                   & Madagascar     & Other Financials                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Divestiture                                                                      & Acq. of Assets  & IMA\\
+	 2021-04-08 & 44294 & Paymob                      & Egypt        & Software                     & -                                     & Paymob is an Egypt-based
+digital payment provider.
+It's products include online
+payment, Point of Sale (POS)
+solutions and Payment links.
+The Company was founded in
+2015 and is located in
+Egypt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     & Investor Group                & Mexico         & Other Financials                  & ⋯ & High Technology    & Financials                     & FMO
+Global Ventures LLC
+A15                                                                    & FMO
+Global Ventures LLC
+Accelero Capital Holdings Sarl                                         & FMO
+Global Ventures LLC
+Accelero Capital Holdings Sarl                                         & -                                                     & -                                             & Acquiror is an Investor Group
+Financial Acquiror                                & Acq. Maj. Int.  & IMA\\
+	 2021-04-07 & -     & Adapt IT Holdings Ltd       & South Africa & IT Consulting \& Services     & -                                     & Adapt IT Holdings Ltd is a
+provider of computer systems
+design services. The
+Company's principal
+activity is providing
+software development
+solutions using Oracle and
+Java technology. It focuses
+on internet solution
+environment, utilizing a
+variety of development tools
+and techniques to deliver
+web-based solutions
+providing clients with
+internet connectivity and
+internet-related software
+products. The Company's
+core skills are focused on
+Oracle Designer, Developer
+and Database technology,
+including Java/J2EE and
+Headstart. Its software
+product brands are
+Tranquility, Canelab,
+DevMan, ApplyIT,
+IntelliPERMIT, FlexiLOG,
+SmartSURE and OptiRUN. The
+Company was founded in 1996
+and is located in Midrand,
+South Africa. & Volaris Group Inc             & Canada         & Other Financials                  & ⋯ & High Technology    & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Scheme of Arrangement                                                            & Acq. Maj. Int.  & IMA\\
+	 2021-04-01 & -     & Airtel Africa Plc-Mobile    & South Africa & Telecommunications Services  & -                                     & Mobile money business of
+Airtel Africa Plc, located
+in South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        & Mastercard Inc                & United States  & Other Financials                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase                                                    & Acq. Part. Int. & IMA\\
+	 2021-03-29 & 44284 & Weelo LLC                   & Egypt        & Software                     & -                                     & Weelo LLC is an Egypt-based
+digital marketplace that
+enables business to business
+retailers and suppliers to
+connect, communicate, and
+collaborate, through machine
+learning, artificial
+intelligence, and predictive
+analytics capabilities. The
+Company helps suppliers and
+gets them noticed by
+retailers from source to
+payments. The Company
+simplifies the relationship
+between retailers and
+suppliers to provide the t
+variety of products in the
+market.                                                                                                                                                                                                                                                                                            & Investor Group                & United States  & Other Financials                  & ⋯ & High Technology    & Financials                     & Skaleup Ventures
+Integral Capital Partners
+The Amer Univ In Cairo Angels
+Undisclosed Acquiror & Skaleup Ventures
+Integral Capital Partners
+The Amer Univ In Cairo Angels
+Undisclosed Acquiror & Skaleup Ventures
+Integral Capital Partners
+The Amer Univ In Cairo Angels
+Undisclosed Acquiror & -                                                     & -                                             & Acquiror is an Investor Group
+Privately Negotiated Purchase
+Financial Acquiror & Acq. Part. Int. & IMA\\
+	 2021-03-23 & -     & Airtel Tchad SA             & Chad         & Other Telecom                & AZB \& Partners                        & Airtel Tchad S.A is a
+provider of
+telecommunications services.
+The Company was founded in
+1970 and is located in
+N'djamena, Chad.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        & Helios Towers PLC             & United Kingdom & Telecommunications Services       & ⋯ & Telecommunications & Telecommunications             & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Divestiture                                                                      & Acq. of Assets  & IMA\\
+	 2021-03-23 & 44278 & Selpal (Pty) Ltd            & South Africa & IT Consulting \& Services     & -                                     & Selpal (Pty) Ltd is a
+provider of custom computer
+programming services. The
+Company is located in South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           & First National Bank Corp      & United States  & Banks                             & ⋯ & High Technology    & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Merger          & IMA\\
+	 2021-03-23 & -     & Airtel Gabon SA             & Gabon        & Wireless                     & AZB \& Partners                        & Airtel Gabon SA is a
+wireless telecommunications
+carrier. The Company is
+located in Libreville,
+Gabon.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    & Helios Towers PLC             & United Kingdom & Telecommunications Services       & ⋯ & Telecommunications & Telecommunications             & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Divestiture                                                                      & Acq. of Assets  & IMA\\
+	 2021-03-23 & -     & Airtel Africa Plc -         & Madagascar   & Telecommunications Services  & AZB \& Partners                        & Madagascar malawi towers of
+Airtel Africa Plc, located
+in Madagascar and Malawi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             & Helios Towers PLC             & United Kingdom & Telecommunications Services       & ⋯ & Telecommunications & Telecommunications             & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Divestiture
+Property Acquisition                                                & Acq. of Assets  & IMA\\
+	 2021-03-18 & -     & Airtel Africa Plc-Mobile    & South Africa & Telecommunications Services  & Herbert Smith Freehills               & Mobile money business of
+Airtel Africa Plc, located
+in South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        & The Rise Fund                 & United States  & Other Financials                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase
+Financial Acquiror                                & Acq. Part. Int. & IMA\\
+	 2021-03-17 & 44272 & M2M System                  & Kenya        & IT Consulting \& Services     & -                                     & M2M System is a software
+publisher. The Company is
+located in Karen, Kenya.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 & BUI (Pty) Ltd                 & South Africa   & IT Consulting \& Services          & ⋯ & High Technology    & High Technology                & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. of Assets  & IMA\\
+	 2021-03-16 & 44293 & Synapsys Systems (Pty) Ltd  & South Africa & IT Consulting \& Services     & -                                     & Synapsys Systems Pty Ltd is
+a provider of custom
+computer programming
+services. The Company was
+founded in 1997 and is
+located in Cape Town, South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              & Acronis International GmbH    & Switzerland    & Software                          & ⋯ & High Technology    & High Technology                & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. of Assets  & IMA\\
+	 2021-03-10 & -     & Mtn Grp Ltd-Fibre And Finl  & South Africa & Wireless                     & -                                     & Fibre and financial services
+units of Mtn Group Ltd,
+located in South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               & Shareholders                  & United States  & Other Financials                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Acquiror is an Investor Group
+Spinoff                                           & Acquisition     & IMA\\
+	 2021-03-09 & 44264 & K3 Telecom Liberia          & Liberia      & Internet Software \& Services & -                                     & K3 Telecom Liberia is an
+internet service provider.
+The Company is located in
+Monrovia, Liberia.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           & Telecel Global Ltd            & United Kingdom & Space and Satellites              & ⋯ & High Technology    & Telecommunications             & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. of Assets  & IMA\\
+	 2021-02-25 & -     & Ctrack Africa Hldg Pty Ltd  & South Africa & Software                     & DLA Piper Advisory Services (Pty) Ltd & Ctrack Africa Holdings Pty
+Ltd is a software publisher.
+It is also a holding
+company. The Company is
+located in Irene, South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     & Main St 1816 Pty Ltd          & South Africa   & Alternative Financial Investments & ⋯ & High Technology    & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Divestiture
+Financial Acquiror                                                  & Merger          & IMA\\
+	 2021-02-22 & 44249 & STE Leader Solution Tactile & Tunisia      & Software                     & -                                     & STE Leader Solution Tactile,
+located in Zarzis, Tunisia,
+is a software publisher.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           & Aures Technologies SA         & France         & Other Consumer Products           & ⋯ & High Technology    & Consumer Products and Services & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Merger          & IMA\\
+	 2021-01-28 & 44224 & Cowrywise Finl Tech Ltd     & Nigeria      & Software                     & -                                     & Cowrywise Financial
+Technology Ltd is a software
+publisher. The Company is
+located in Lagos, Nigeria.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      & Investor Group                & United States  & Other Financials                  & ⋯ & High Technology    & Financials                     & Quona Capital LLC
+Tsadik Foundation
+Sahil Lavingia                                             & Quona Capital LLC
+Tsadik Foundation
+Sahil Lavingia                                             & Quona Capital LLC
+Tsadik Foundation
+Sahil Lavingia                                             & -                                                     & -                                             & Acquiror is an Investor Group
+Privately Negotiated Purchase
+Financial Acquiror & Acq. Part. Int. & IMA\\
+	 2021-01-01 & 44197 & Orange Madagascar SA        & Madagascar   & Telecommunications Services  & -                                     & Orange Madagascar SA, based
+in businesses. Antananarivo,
+Madagascar, provides
+telecommunications services.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 & Orange SA                     & France         & Telecommunications Services       & ⋯ & Telecommunications & Telecommunications             & -                                                                                                & -                                                                                                & -                                                                                                & Terra Mauricia Ltd
+CIEL Finance Ltd
+Thierry Lagesse & Terra Mauricia Ltd
+CIEL Ltd
+Thierry Lagesse & Privately Negotiated Purchase
+Financial Acquiror                                & Acq. Part. Int. & IMA\\
+	 2020-12-22 & -     & MineRP Holdings Pty Ltd     & South Africa & IT Consulting \& Services     & -                                     & MineRP Holdings Pty Ltd is a
+provider of computer
+facilities management
+services. The Company was
+founded in 2017 and is
+located in Johannesburg,
+South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         & Epiroc Canada Hldg Inc        & Canada         & Other Financials                  & ⋯ & High Technology    & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & MineRP Holdings Pty Ltd                               & Dundee Precious Metals Inc                    & Divestiture                                                                      & Merger          & IMA\\
+	 2020-12-21 & 44186 & Zeepay Ghana Ltd            & Ghana        & Software                     & -                                     & Zeepay Ghana Limited is a
+software. The Company was
+founded in 2014 and is
+located in Accra, Ghana.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        & Goodsoil Vc                   & United Kingdom & Alternative Financial Investments & ⋯ & High Technology    & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase
+Financial Acquiror                                & Acq. Part. Int. & IMA\\
+	 2020-12-18 & -     & Corex (Pty) Ltd             & South Africa & Electronics                  & -                                     & Corex (Pty) Ltd is an
+electronic parts and
+equipment wholesaler. The
+Company is located in South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  & Sysage Technology Co Ltd      & Taiwan         & Software                          & ⋯ & High Technology    & High Technology                & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase                                                    & Acq. Part. Int. & IMA\\
+	 2020-12-16 & 44181 & OnePipe.io Services Ltd     & Nigeria      & Internet Software \& Services & -                                     & OnePipe.io Services Ltd is
+an application based
+provider of financial
+transactions services. The
+Company is located in Ikeja,
+Nigeria.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   & Investor Group                & South Africa   & Other Financials                  & ⋯ & High Technology    & Financials                     & Atlantica Ventures
+DFS Lab
+Future Perfect Ventures LLC                                         & Atlantica Ventures
+DFS Lab
+Future Perfect Ventures LLC                                         & Atlantica Ventures
+DFS Lab
+Future Perfect Ventures LLC                                         & -                                                     & -                                             & Acquiror is an Investor Group
+Privately Negotiated Purchase
+Financial Acquiror & Acq. Part. Int. & IMA\\
+	 2020-12-03 & 44234 & Itsalat Intl Co             & Egypt        & Wireless                     & -                                     & Itsalat International Co is
+a wireless
+telecommunications carrier.
+The Company was founded in
+1993 and is located in
+Cairo, Egypt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       & Raya Distribution Co SAE      & Egypt          & Internet and Catalog Retailing    & ⋯ & Telecommunications & Retail                         & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. Maj. Int.  & IMA\\
+	 2020-11-26 & 44161 & Icolo Ltd                   & Kenya        & Other Telecom                & -                                     & Icolo Ltd is a provider of
+telecommunications services.
+The Company is located in
+Upper Hill, Kenya.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       & Pembani Remgro Infrastructure & South Africa   & Other Financials                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase
+Financial Acquiror                                & Acq. Part. Int. & IMA\\
+	 2020-11-12 & 44147 & Betking                     & Nigeria      & Computers \& Peripherals      & -                                     & Betking is a provider of
+data processing and hosting
+services. The Company is
+located in Nigeria.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          & MultiChoice Group Ltd         & South Africa   & Cable                             & ⋯ & High Technology    & Media and Entertainment        & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase                                                    & Acq. Part. Int. & IMA\\
+	 2020-11-12 & 44147 & Peach Bots (Pty) Ltd        & South Africa & Software                     & -                                     & Peach Bots Pty Ltd is an
+artificial intelligence
+(AI)-based financial
+technology company. The
+Company offers
+conversational AI solutions
+for the financial services
+industry. The Company
+enables customers to go
+through the sales process,
+from pre-sales support to
+completing the purchase on
+secure payment gateways.
+Through gathering and
+storing data, conversational
+AI develops the ability to
+understand the user's
+intentions behind the
+request. The Company
+services financial service
+providers, including banks
+and insurers, helping to
+sell and service financial
+products. The Company was
+founded in November 2016 and
+is located in Johannesburg,
+South Africa.                                                                & Investor Group                & France         & Other Financials                  & ⋯ & High Technology    & Financials                     & Saviu Ventures
+Compass Venture Inc                                                              & Saviu Ventures
+Compass Venture Inc                                                              & Saviu Ventures
+Compass Venture Inc                                                              & -                                                     & -                                             & Acquiror is an Investor Group
+Privately Negotiated Purchase
+Financial Acquiror & Acq. Part. Int. & IMA\\
+	 2020-10-26 & 44130 & LIQUID Telecommun Hldg Ltd  & Mauritius    & Telecommunications Services  & -                                     & LIQUID Telecommunications
+Holdings Ltd is a wired
+telecommunications carrier.
+The Company was founded in
+January 2007 and is located
+in Ebene, Mauritius.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                & CDC Group PLC                 & United Kingdom & Asset Management                  & ⋯ & Telecommunications & Financials                     & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Privately Negotiated Purchase                                                    & Acq. Part. Int. & IMA\\
+	 2020-10-20 & -     & Liquid Telecom Botswana     & Botswana     & Telecommunications Services  & -                                     & Liquid Telecom Botswana is a
+wired telecommunications
+carrier. The Company is
+located in Gaborone,
+Botswana.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              & LIQUID Telecommun Hldg Ltd    & Mauritius      & Telecommunications Services       & ⋯ & Telecommunications & Telecommunications             & -                                                                                                & -                                                                                                & -                                                                                                & -                                                     & -                                             & Not Applicable                                                                   & Acq. Rem. Int.  & IMA\\
+	 ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋱ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮\\
+	 2016-08-24 & 42606 & Twiga Foods Ltd                & Kenya         & E-commerce / B2B               & -                                        & Twiga Foods Ltd is a
+business to business
+electronic market operator.
+The company was founded in
+2013 and is located in
+Nairobi, Kenya.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          & Stichting DOB Equity           & Netherlands    & Alternative Financial Investments & ⋯ & High Technology         & Financials              & -                                                  & -                                                   & -                                                         & -              & -              & Privately Negotiated Purchase
+Financial Acquiror                       & Acq. Part. Int. & IMA\\
+	 2016-07-25 & 42576 & XLink Communications (Pty) Ltd & South Africa  & Telecommunications Services    & -                                        & XLink Communications (Pty) Ltd
+is a wired telecommunications
+carrier. The Company is
+located in Johannesburg, South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       & Vodacom Ventures               & South Africa   & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Not Applicable                                                          & Acq. Rem. Int.  & IMA\\
+	 2016-07-21 & 42572 & BTech For Trading \& Distn Co   & Egypt         & Electronics                    & White \& Case LLP
+Zulficar \& Partners Co & BTech For Trading \&
+Distribution Co SAE is an
+electronic parts and equipment
+wholesaler. These include
+computer and mobile games,
+mobile phones, and laptops.
+The Company is a franchiser of
+a number of international
+brands, such as Sony, Ariston,
+Indesit, Philips, Daewoo,
+Haier and Crafft, and
+collaborates with business
+partners, such as Vodafone,
+Samsung, Siemens, Motorola,
+Toshiba, LG and Nokia. It also
+offers related repair
+services. The Company was
+founded in 1997 and is located
+in Cairo, Egypt.                                                                             & African Dvlp Partners II LP    & Guernsey       & Other Financials                  & ⋯ & High Technology         & Financials              & -                                                  & -                                                   & -                                                         & -              & -              & Privately Negotiated Purchase
+Financial Acquiror                       & Acq. Part. Int. & IMA\\
+	 2016-07-05 & 42556 & Rise Broadcast Pty Ltd         & South Africa  & Broadcasting                   & -                                        & Rise Broadcast Pty Ltd is a
+radio station. The Company
+is located in Nelspruit,
+South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      & Times Media Group Ltd          & South Africa   & Broadcasting                      & ⋯ & Media and Entertainment & Media and Entertainment & -                                                  & -                                                   & -                                                         & -              & -              & Privately Negotiated Purchase                                           & Acq. Part. Int. & IMA\\
+	 2016-06-28 & 42776 & Neotel (Pty) Ltd               & South Africa  & Telecommunications Services    & -                                        & Neotel (Pty) Ltd, located in
+Johannesburg, South Africa,
+provides telecommunications
+services. The company was
+previously known as SNO
+Telecommunications. The
+company is the much
+anticipated second national
+operator (SNO) for fixed
+line telecommunication
+services in the country. The
+company was founded in 2007.                                                                                                                                                                                                                                                                                   & Investor Group                 & United Kingdom & Other Financials                  & ⋯ & Telecommunications      & Financials              & Liquid Telecom Group
+Royal Bafokeng Holdings(Pty) & Econet Wireless Group
+Royal Bafokeng Holdings(Pty) & Allied Electronics Corp Ltd
+Royal Bafokeng Holdings(Pty) & -              & -              & Acquiror is an Investor Group
+Divestiture                              & Merger          & IMA\\
+	 2016-06-18 & 42539 & Buni TV                        & South Africa  & Broadcasting                   & -                                        & Buni TV is a television
+broadcaster. The Company is
+located in South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        & Trace TV SA                    & France         & Broadcasting                      & ⋯ & Media and Entertainment & Media and Entertainment & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Financial Acquiror                                         & Acq. of Assets  & IMA\\
+	 2016-06-16 & 42537 & Mobile Telecommunications Ltd  & Namibia       & Telecommunications Services    & White \& Case LLP                         & Mobile Telecommunications Ltd
+is a wired telecommunications
+carrier. The Company is
+located in Windhoek, Namibia.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  & Samba Luxco Sarl               & Luxembourg     & Other Financials                  & ⋯ & Telecommunications      & Financials              & -                                                  & -                                                   & -                                                         & Oi SA          & Oi SA          & Privately Negotiated Purchase                                           & Acq. Part. Int. & IMA\\
+	 2016-06-07 & 42528 & Medtech SA                     & Morocco       & IT Consulting \& Services       & -                                        & Medtech SA is a software
+publisher, and is one of the
+national leaders in
+Consulting, Engineering and
+Services in Information
+Technology. The Company is
+located in Casablanca,
+Morocco.                                                                                                                                                                                                                                                                                                                                                                                                                       & Mediterrania Capital II        & Spain          & Other Financials                  & ⋯ & High Technology         & Financials              & -                                                  & -                                                   & -                                                         & -              & -              & Privately Negotiated Purchase
+Financial Acquiror                       & Acq. Part. Int. & IMA\\
+	 2016-06-03 & 42524 & Coporeti Support Svcs Pvt Ltd  & Zimbabwe      & Internet and Catalog Retailing & -                                        & Coporeti Support Services Pvt
+Ltd is an online retailer. The
+company is located in Harare,
+Zimbabwe.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               & Brainworks Capital Management  & Zimbabwe       & Alternative Financial Investments & ⋯ & Retail                  & Financials              & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Leveraged Buyout
+Financial Acquiror
+Institutional Buyout & Merger          & IMA\\
+	 2016-06-01 & 42735 & Eaton Llp-S African towers     & South Africa  & Telecommunications Services    & Allen \& Overy                            & South african towers of Eaton
+Towers Llp, located in South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  & American Tower Corp            & United States  & REITs                             & ⋯ & Telecommunications      & Real Estate             & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Financial Acquiror                                         & Acq. of Assets  & IMA\\
+	 2016-05-25 & 42515 & Bluekey Holdings (Pty) Ltd     & South Africa  & Software                       & -                                        & Bluekey Holdings (Pty) Ltd
+develops SAP business
+software. The Company is
+located in Johannesburg, South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  & Seidor SA                      & Spain          & IT Consulting \& Services          & ⋯ & High Technology         & High Technology         & -                                                  & -                                                   & -                                                         & -              & -              & Not Applicable                                                          & Acq. Maj. Int.  & IMA\\
+	 2016-05-05 & 42495 & Bharti Airtel Intl-Telecoms    & Dem Rep Congo & Telecommunications Services    & AZB \& Partners                           & Approximately 950
+telecommunications towers
+located in the Democratic
+Republic of Congo. The
+divestment also includes
+towers currently under
+construction in the DRC.                                                                                                                                                                                                                                                                                                                                                                                                                                           & Helios Towers Africa Ltd       & United Kingdom & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Financial Acquiror                                         & Acq. of Assets  & IMA\\
+	 2016-05-02 & 42589 & Canar Telecommunications Co    & Sudan         & Telecommunications Services    & -                                        & Canar Telecommunications Co
+Ltd, located in Khartoum,
+Sudan, provides
+telecommunications services,
+using technologies such as
+Next Generation Network (NGN)
+and Wireless Loop (WLL). Its
+products and services include
+voice, data, internet and
+multi media services. The
+Company was founded in 2005.                                                                                                                                                                                                                                                                                                     & Sudanese Mobile Tele (Zain)    & Sudan          & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture                                                             & Acq. Maj. Int.  & IMA\\
+	 2016-04-29 & 42489 & Novafone Inc                   & Liberia       & Telecommunications Services    & -                                        & Novafone Inc is a wired
+telecommunications carrier.
+The company is located in
+Liberia.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             & Liberia Telecommunications     & Liberia        & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Not Applicable                                                          & Acq. of Assets  & IMA\\
+	 2016-04-29 & 42733 & Cote d'Ivoire Telecom SA       & Ivory Coast   & Telecommunications Services    & -                                        & Cote d'Ivoire Telecom SA is
+telecommunications carrier.
+The company was founded in
+1991 and is located in
+Abidjan, Ivory Coast.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   & Orange Cote d'Ivoire SA        & Ivory Coast    & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Rumored Deal
+Internal Reorganization                      & Merger          & IMA\\
+	 2016-04-27 & 42487 & Bloy Mineral Resource          & South Africa  & Software                       & -                                        & Bloy Mineral Resource
+Evaluation cc is a software
+publisher. The Company is
+located in George, South
+Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      & ARANZ Geo Ltd                  & New Zealand    & IT Consulting \& Services          & ⋯ & High Technology         & High Technology         & -                                                  & -                                                   & -                                                         & -              & -              & Financial Acquiror                                                      & Acq. of Assets  & IMA\\
+	 2016-04-12 & -     & Skygistics (Pty) Ltd           & South Africa  & Space and Satellites           & -                                        & Skygistics Ltd is a provider
+of satellite
+telecommunications services.
+The company is located in
+Centurion, South Africa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         & ORBCOMM Inc                    & United States  & Space and Satellites              & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture                                                             & Acq. of Assets  & IMA\\
+	 2016-04-11 & -     & Net 1 UEPS Technologies Inc    & South Africa  & Computers \& Peripherals        & -                                        & Net 1 UEPS Technologies Inc
+is a provider of data
+processing and hosting
+services. The Company is a
+provider of payment
+solutions, transaction
+processing services and
+financial technology across
+multiple industries and in a
+number of emerging and
+developed economies. It also
+provide secure financial
+technology solutions and
+services, by offering
+transaction processing,
+financial and clinical risk
+management solutions to
+various industries. The
+Company is located in
+Johannesburg, South Africa.
+The Company was founded in
+1989 and is located in
+Johannesburg, South Africa. & International Finance Corp     & United States  & Supranational                     & ⋯ & High Technology         & Government and Agencies & -                                                  & -                                                   & -                                                         & -              & -              & Privately Negotiated Purchase                                           & Acq. Part. Int. & IMA\\
+	 2016-04-07 & 42467 & BSocial                        & Egypt         & Internet Software \& Services   & -                                        & BSocial is a provider of
+online social network
+services. The Company was
+founded in 2009 and is located
+in Cairo, Egypt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          & SOCIALEYEZ FZCO                & Utd Arab Em    & Internet Software \& Services      & ⋯ & High Technology         & High Technology         & -                                                  & -                                                   & -                                                         & -              & -              & Not Applicable                                                          & Acq. of Assets  & IMA\\
+	 2016-03-29 & 42458 & Rapid Blue (Pty) Ltd           & South Africa  & Broadcasting                   & -                                        & Rapid Blue (Pty) Ltd, located
+in Johannesburg, South Africa,
+is a television broadcaster.
+The Company was founded in
+1993.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        & BBC Worldwide Ltd              & United Kingdom & Broadcasting                      & ⋯ & Media and Entertainment & Media and Entertainment & -                                                  & -                                                   & -                                                         & -              & -              & Privately Negotiated Purchase                                           & Acq. Part. Int. & IMA\\
+	 2016-03-23 & 42452 & DealDey Ltd                    & Nigeria       & Internet and Catalog Retailing & -                                        & DealDey Ltd is an online
+retailer. The company is
+located in Nigeria.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               & Ringier Africa Deals Group Ltd & South Africa   & E-commerce / B2B                  & ⋯ & Retail                  & High Technology         & -                                                  & -                                                   & -                                                         & -              & -              & Not Applicable                                                          & Acq. of Assets  & IMA\\
+	 2016-03-21 & -     & Airtel-Towers(1350)            & Tanzania      & Telecommunications Services    & AZB \& Partners                           & 1350 communications towers of
+Airtel Tanzania Ltd, located
+in Tanzania.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             & American Tower Corp            & United States  & REITs                             & ⋯ & Telecommunications      & Real Estate             & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Financial Acquiror                                         & Acq. of Assets  & IMA\\
+	 2016-03-10 & 42534 & HTN Towers                     & Nigeria       & Telecommunications Services    & White \& Case LLP                         & Helios Towers Nigeria (HTN),
+located in Lagos, Nigeria is a
+provider of telecommunication
+services. The company builds
+and maintains a network of
+telecommunications towers and
+leases space on the towers to
+wireless telecommunications
+service providers. The
+company's operations started
+in January 2006, and their
+first site went live in June
+2006. The company's site
+portfolio includes over 1000
+four-operator sites across
+Nigeria's 6 geo-political
+zones with key markets
+including Abuja, Lagos, Port
+Harcourt, Warii, Kaduna,
+Onitsha and Ibadan.                                  & IHS Holding Ltd                & Mauritius      & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & HTN Towers Plc & HTN Towers Plc & Divestiture                                                             & Merger          & IMA\\
+	 2016-03-02 & 42502 & Emerging Markets Payments Grp  & Egypt         & Computers \& Peripherals        & Clifford Chance
+Webber Wentzel          & Emerging Markets Payments
+Group is a provider of data
+processing and hosting
+services. The company was
+founded in July 2010 and is
+located in Cairo, Egypt.                                                                                                                                                                                                                                                                                                                                                                                                                                                      & Network International LLC      & Utd Arab Em    & Other Financials                  & ⋯ & High Technology         & Financials              & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture
+Financial Acquiror                                         & Acq. of Assets  & IMA\\
+	 2016-02-22 & 42422 & Big Concerts International (Pt & South Africa  & Motion Pictures / Audio Visual & Hogan Lovells                            & Big Concerts International
+(Pty) Ltd is a provider of
+entertainment services. The
+company engaged in live
+entertainment events,
+merchandising, sponsorships,
+corporate and private events.
+The company is located in
+South Africa.                                                                                                                                                                                                                                                                                                                                                                            & Live Nation Entertainment Inc  & United States  & Advertising \& Marketing           & ⋯ & Media and Entertainment & Media and Entertainment & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture                                                             & Acq. Maj. Int.  & IMA\\
+	 2016-02-12 & -     & Infovest Consulting (Pty) Ltd  & South Africa  & IT Consulting \& Services       & -                                        & Infovest Consulting (Pty) Ltd
+is a software provider,
+specialising in data
+warehouse, ETL and reporting
+software for the asset
+management industry. The
+Company is located in Cape
+Town, South Africa.                                                                                                                                                                                                                                                                                                                                                                                                         & Statpro Group PLC              & United Kingdom & Software                          & ⋯ & High Technology         & High Technology         & -                                                  & -                                                   & -                                                         & -              & -              & Not Applicable                                                          & Acq. Maj. Int.  & IMA\\
+	 2016-02-08 & 42481 & Oasis SA                       & Dem Rep Congo & Wireless                       & Davis Polk \& Wardwell                    & Oasis SPRL is a wireless
+telecommunications carrier.
+The company was founded in
+2007 and is located in
+Kinshasa, the Dem Rep Congo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               & Orange SA                      & France         & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture                                                             & Merger          & IMA\\
+	 2016-01-13 & 42382 & Document Bk Botswana (Pty) Ltd & Botswana      & Computers \& Peripherals        & -                                        & Document Bank Botswana (Pty)
+Ltd, located in Gaborone,
+Botswana, provides information
+storage, protection and
+retrieval services.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 & Metrofile Holdings Ltd         & South Africa   & Computers \& Peripherals           & ⋯ & High Technology         & High Technology         & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture                                                             & Acq. of Assets  & IMA\\
+	 2016-01-12 & 42467 & Cellcom TeleCommun Ltd-Unit    & Liberia       & Telecommunications Services    & -                                        & Cellcom Telecommunications
+Ltd-Unit is a wired
+telecommunications carrier.
+The company is located in
+Liberia.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     & Orange Cote d'Ivoire SA        & Ivory Coast    & Telecommunications Services       & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Divestiture                                                             & Merger          & IMA\\
+	 2016-01-07 & 42376 & Visafone Communications Ltd    & Nigeria       & Telecommunications Services    & -                                        & Visafone Communications Ltd,
+located in Lagos, Nigeria,
+provides telecommunications
+services.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      & MTN Group Ltd                  & South Africa   & Wireless                          & ⋯ & Telecommunications      & Telecommunications      & -                                                  & -                                                   & -                                                         & -              & -              & Rumored Deal                                                            & Acq. of Assets  & IMA\\
+\end{tabular}
+
+
+    
+    The relevant columns are selected and extracted into a tibble (a table)
+named ``takeover''.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{takeovers} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{data} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} 
+    \PY{n+nf}{select}\PY{p}{(}\PY{n}{dt}\PY{o}{=}\PY{n}{DateAnnounced}\PY{p}{,}
+           \PY{n}{t.nam}\PY{o}{=}\PY{n}{Target.nam}\PY{p}{,} 
+           \PY{n}{a.nam}\PY{o}{=}\PY{n}{Acquiror.nam}\PY{p}{,} 
+           \PY{n}{t.sec}\PY{o}{=}\PY{n}{Target.sector}\PY{p}{,}
+           \PY{n}{a.sec}\PY{o}{=}\PY{n}{Acquiror.sec}\PY{p}{,} 
+           \PY{n}{t.nat}\PY{o}{=}\PY{n}{Target.nat}\PY{p}{,} 
+           \PY{n}{a.nat}\PY{o}{=}\PY{n}{Acquiror.nat}\PY{p}{)}\PY{p}{;}
+\PY{n}{takeovers}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A tibble: 230 × 7
+\begin{tabular}{lllllll}
+ dt & t.nam & a.nam & t.sec & a.sec & t.nat & a.nat\\
+ <dttm> & <chr> & <chr> & <chr> & <chr> & <chr> & <chr>\\
+\hline
+	 2021-04-27 & Dragonfly Aerospace         & Max Polyakov                  & Telecommunications Equipment & Other Financials                  & South Africa & Ukraine       \\
+	 2021-04-20 & Adapt IT Holdings Ltd       & Blacksheep Master Fund Ltd    & IT Consulting \& Services     & Other Financials                  & South Africa & Cayman Islands\\
+	 2021-04-19 & Millicom Tanzania Ltd       & Axian Group                   & Wireless                     & Other Financials                  & Tanzania     & Madagascar    \\
+	 2021-04-08 & Paymob                      & Investor Group                & Software                     & Other Financials                  & Egypt        & Mexico        \\
+	 2021-04-07 & Adapt IT Holdings Ltd       & Volaris Group Inc             & IT Consulting \& Services     & Other Financials                  & South Africa & Canada        \\
+	 2021-04-01 & Airtel Africa Plc-Mobile    & Mastercard Inc                & Telecommunications Services  & Other Financials                  & South Africa & United States \\
+	 2021-03-29 & Weelo LLC                   & Investor Group                & Software                     & Other Financials                  & Egypt        & United States \\
+	 2021-03-23 & Airtel Tchad SA             & Helios Towers PLC             & Other Telecom                & Telecommunications Services       & Chad         & United Kingdom\\
+	 2021-03-23 & Selpal (Pty) Ltd            & First National Bank Corp      & IT Consulting \& Services     & Banks                             & South Africa & United States \\
+	 2021-03-23 & Airtel Gabon SA             & Helios Towers PLC             & Wireless                     & Telecommunications Services       & Gabon        & United Kingdom\\
+	 2021-03-23 & Airtel Africa Plc -         & Helios Towers PLC             & Telecommunications Services  & Telecommunications Services       & Madagascar   & United Kingdom\\
+	 2021-03-18 & Airtel Africa Plc-Mobile    & The Rise Fund                 & Telecommunications Services  & Other Financials                  & South Africa & United States \\
+	 2021-03-17 & M2M System                  & BUI (Pty) Ltd                 & IT Consulting \& Services     & IT Consulting \& Services          & Kenya        & South Africa  \\
+	 2021-03-16 & Synapsys Systems (Pty) Ltd  & Acronis International GmbH    & IT Consulting \& Services     & Software                          & South Africa & Switzerland   \\
+	 2021-03-10 & Mtn Grp Ltd-Fibre And Finl  & Shareholders                  & Wireless                     & Other Financials                  & South Africa & United States \\
+	 2021-03-09 & K3 Telecom Liberia          & Telecel Global Ltd            & Internet Software \& Services & Space and Satellites              & Liberia      & United Kingdom\\
+	 2021-02-25 & Ctrack Africa Hldg Pty Ltd  & Main St 1816 Pty Ltd          & Software                     & Alternative Financial Investments & South Africa & South Africa  \\
+	 2021-02-22 & STE Leader Solution Tactile & Aures Technologies SA         & Software                     & Other Consumer Products           & Tunisia      & France        \\
+	 2021-01-28 & Cowrywise Finl Tech Ltd     & Investor Group                & Software                     & Other Financials                  & Nigeria      & United States \\
+	 2021-01-01 & Orange Madagascar SA        & Orange SA                     & Telecommunications Services  & Telecommunications Services       & Madagascar   & France        \\
+	 2020-12-22 & MineRP Holdings Pty Ltd     & Epiroc Canada Hldg Inc        & IT Consulting \& Services     & Other Financials                  & South Africa & Canada        \\
+	 2020-12-21 & Zeepay Ghana Ltd            & Goodsoil Vc                   & Software                     & Alternative Financial Investments & Ghana        & United Kingdom\\
+	 2020-12-18 & Corex (Pty) Ltd             & Sysage Technology Co Ltd      & Electronics                  & Software                          & South Africa & Taiwan        \\
+	 2020-12-16 & OnePipe.io Services Ltd     & Investor Group                & Internet Software \& Services & Other Financials                  & Nigeria      & South Africa  \\
+	 2020-12-03 & Itsalat Intl Co             & Raya Distribution Co SAE      & Wireless                     & Internet and Catalog Retailing    & Egypt        & Egypt         \\
+	 2020-11-26 & Icolo Ltd                   & Pembani Remgro Infrastructure & Other Telecom                & Other Financials                  & Kenya        & South Africa  \\
+	 2020-11-12 & Betking                     & MultiChoice Group Ltd         & Computers \& Peripherals      & Cable                             & Nigeria      & South Africa  \\
+	 2020-11-12 & Peach Bots (Pty) Ltd        & Investor Group                & Software                     & Other Financials                  & South Africa & France        \\
+	 2020-10-26 & LIQUID Telecommun Hldg Ltd  & CDC Group PLC                 & Telecommunications Services  & Asset Management                  & Mauritius    & United Kingdom\\
+	 2020-10-20 & Liquid Telecom Botswana     & LIQUID Telecommun Hldg Ltd    & Telecommunications Services  & Telecommunications Services       & Botswana     & Mauritius     \\
+	 ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮ & ⋮\\
+	 2016-08-24 & Twiga Foods Ltd                & Stichting DOB Equity           & E-commerce / B2B               & Alternative Financial Investments & Kenya         & Netherlands   \\
+	 2016-07-25 & XLink Communications (Pty) Ltd & Vodacom Ventures               & Telecommunications Services    & Telecommunications Services       & South Africa  & South Africa  \\
+	 2016-07-21 & BTech For Trading \& Distn Co   & African Dvlp Partners II LP    & Electronics                    & Other Financials                  & Egypt         & Guernsey      \\
+	 2016-07-05 & Rise Broadcast Pty Ltd         & Times Media Group Ltd          & Broadcasting                   & Broadcasting                      & South Africa  & South Africa  \\
+	 2016-06-28 & Neotel (Pty) Ltd               & Investor Group                 & Telecommunications Services    & Other Financials                  & South Africa  & United Kingdom\\
+	 2016-06-18 & Buni TV                        & Trace TV SA                    & Broadcasting                   & Broadcasting                      & South Africa  & France        \\
+	 2016-06-16 & Mobile Telecommunications Ltd  & Samba Luxco Sarl               & Telecommunications Services    & Other Financials                  & Namibia       & Luxembourg    \\
+	 2016-06-07 & Medtech SA                     & Mediterrania Capital II        & IT Consulting \& Services       & Other Financials                  & Morocco       & Spain         \\
+	 2016-06-03 & Coporeti Support Svcs Pvt Ltd  & Brainworks Capital Management  & Internet and Catalog Retailing & Alternative Financial Investments & Zimbabwe      & Zimbabwe      \\
+	 2016-06-01 & Eaton Llp-S African towers     & American Tower Corp            & Telecommunications Services    & REITs                             & South Africa  & United States \\
+	 2016-05-25 & Bluekey Holdings (Pty) Ltd     & Seidor SA                      & Software                       & IT Consulting \& Services          & South Africa  & Spain         \\
+	 2016-05-05 & Bharti Airtel Intl-Telecoms    & Helios Towers Africa Ltd       & Telecommunications Services    & Telecommunications Services       & Dem Rep Congo & United Kingdom\\
+	 2016-05-02 & Canar Telecommunications Co    & Sudanese Mobile Tele (Zain)    & Telecommunications Services    & Telecommunications Services       & Sudan         & Sudan         \\
+	 2016-04-29 & Novafone Inc                   & Liberia Telecommunications     & Telecommunications Services    & Telecommunications Services       & Liberia       & Liberia       \\
+	 2016-04-29 & Cote d'Ivoire Telecom SA       & Orange Cote d'Ivoire SA        & Telecommunications Services    & Telecommunications Services       & Ivory Coast   & Ivory Coast   \\
+	 2016-04-27 & Bloy Mineral Resource          & ARANZ Geo Ltd                  & Software                       & IT Consulting \& Services          & South Africa  & New Zealand   \\
+	 2016-04-12 & Skygistics (Pty) Ltd           & ORBCOMM Inc                    & Space and Satellites           & Space and Satellites              & South Africa  & United States \\
+	 2016-04-11 & Net 1 UEPS Technologies Inc    & International Finance Corp     & Computers \& Peripherals        & Supranational                     & South Africa  & United States \\
+	 2016-04-07 & BSocial                        & SOCIALEYEZ FZCO                & Internet Software \& Services   & Internet Software \& Services      & Egypt         & Utd Arab Em   \\
+	 2016-03-29 & Rapid Blue (Pty) Ltd           & BBC Worldwide Ltd              & Broadcasting                   & Broadcasting                      & South Africa  & United Kingdom\\
+	 2016-03-23 & DealDey Ltd                    & Ringier Africa Deals Group Ltd & Internet and Catalog Retailing & E-commerce / B2B                  & Nigeria       & South Africa  \\
+	 2016-03-21 & Airtel-Towers(1350)            & American Tower Corp            & Telecommunications Services    & REITs                             & Tanzania      & United States \\
+	 2016-03-10 & HTN Towers                     & IHS Holding Ltd                & Telecommunications Services    & Telecommunications Services       & Nigeria       & Mauritius     \\
+	 2016-03-02 & Emerging Markets Payments Grp  & Network International LLC      & Computers \& Peripherals        & Other Financials                  & Egypt         & Utd Arab Em   \\
+	 2016-02-22 & Big Concerts International (Pt & Live Nation Entertainment Inc  & Motion Pictures / Audio Visual & Advertising \& Marketing           & South Africa  & United States \\
+	 2016-02-12 & Infovest Consulting (Pty) Ltd  & Statpro Group PLC              & IT Consulting \& Services       & Software                          & South Africa  & United Kingdom\\
+	 2016-02-08 & Oasis SA                       & Orange SA                      & Wireless                       & Telecommunications Services       & Dem Rep Congo & France        \\
+	 2016-01-13 & Document Bk Botswana (Pty) Ltd & Metrofile Holdings Ltd         & Computers \& Peripherals        & Computers \& Peripherals           & Botswana      & South Africa  \\
+	 2016-01-12 & Cellcom TeleCommun Ltd-Unit    & Orange Cote d'Ivoire SA        & Telecommunications Services    & Telecommunications Services       & Liberia       & Ivory Coast   \\
+	 2016-01-07 & Visafone Communications Ltd    & MTN Group Ltd                  & Telecommunications Services    & Wireless                          & Nigeria       & South Africa  \\
+\end{tabular}
+
+
+    
+    Other than white space around entries (which should be cleaned up), the
+data looks fine.
+
+    To start with the analysis, look at the per nation acquisitions in
+Africa. Only nations with 3 or more takeovers are considered.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{group.a.nat}  \PY{o}{\PYZlt{}\PYZhy{}}  \PY{n}{takeovers} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{group\PYZus{}by}\PY{p}{(}\PY{n}{a.nat}\PY{p}{)} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{summarise}\PY{p}{(}\PY{n}{n}\PY{o}{=}\PY{n+nf}{n}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+\PY{n}{group.a.nat}  \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{group.a.nat}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{group.a.nat}\PY{o}{\PYZdl{}}\PY{n}{n}\PY{p}{,}\PY{n}{decreasing}\PY{o}{=}\PY{k+kc}{TRUE}\PY{p}{)}\PY{p}{,}\PY{p}{]} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{filter}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZgt{}}\PY{l+m}{2}\PY{p}{)}
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{group.a.nat}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Acquiror nation\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Count\PYZdq{}}\PY{p}{)}
+\PY{n}{group.a.nat}
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{group.a.nat}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{a.nat\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{n\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A tibble: 20 × 2
+\begin{tabular}{ll}
+ Acquiror nation & Count\\
+ <chr> & <int>\\
+\hline
+	 United States  & 40\\
+	 South Africa   & 35\\
+	 United Kingdom & 31\\
+	 France         & 19\\
+	 Mauritius      & 13\\
+	 Morocco        &  7\\
+	 Namibia        &  6\\
+	 Netherlands    &  6\\
+	 Switzerland    &  5\\
+	 Utd Arab Em    &  5\\
+	 Australia      &  4\\
+	 Canada         &  4\\
+	 Egypt          &  4\\
+	 Germany        &  4\\
+	 Hong Kong      &  4\\
+	 Malaysia       &  4\\
+	 India          &  3\\
+	 Ivory Coast    &  3\\
+	 Nigeria        &  3\\
+	 Zimbabwe       &  3\\
+\end{tabular}
+
+
+    
+    Seeing this it is apparent that the US (40), UK (31) and France (19) are
+the 3 nations outside of Africa heavily involved in takeovers of African
+companies. Other major takeover nations within Africa are Mauritius (13)
+and South Africa (35). \emph{Possible reasons} Until recently South
+Africa's economy was the largest in Africa, so their takeover tally
+might be expected. Mauritius has drawn much invest in recent years due
+to its very favourable tax laws. It could be that expatriated companies
+are becoming involved in takeovers of African companies to domicile
+themselves in Mauritius. The large number of takeovers from US, UK and
+France may reflect the history between nations and also the value being
+offered by African countries over the last 5 years.
+
+Looking at the target nations: (only nations with 3 or more takeovers
+are listed)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{group.t.nat}  \PY{o}{\PYZlt{}\PYZhy{}}  \PY{n}{takeovers} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{group\PYZus{}by}\PY{p}{(}\PY{n}{t.nat}\PY{p}{)} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{summarise}\PY{p}{(}\PY{n}{n}\PY{o}{=}\PY{n+nf}{n}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+\PY{n}{group.t.nat}  \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{group.t.nat}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{group.t.nat}\PY{o}{\PYZdl{}}\PY{n}{n}\PY{p}{,}\PY{n}{decreasing}\PY{o}{=}\PY{k+kc}{TRUE}\PY{p}{)}\PY{p}{,}\PY{p}{]} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{filter}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZgt{}}\PY{l+m}{2}\PY{p}{)}
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{group.t.nat}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Target nation\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Count\PYZdq{}}\PY{p}{)}
+\PY{n}{group.t.nat}
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{group.t.nat}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{t.nat\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{n\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A tibble: 14 × 2
+\begin{tabular}{ll}
+ Target nation & Count\\
+ <chr> & <int>\\
+\hline
+	 South Africa & 79\\
+	 Egypt        & 29\\
+	 Nigeria      & 22\\
+	 Kenya        & 21\\
+	 Mauritius    &  9\\
+	 Tanzania     &  8\\
+	 Morocco      &  7\\
+	 Namibia      &  7\\
+	 Ghana        &  5\\
+	 Tunisia      &  5\\
+	 Senegal      &  4\\
+	 Botswana     &  3\\
+	 Ivory Coast  &  3\\
+	 Liberia      &  3\\
+\end{tabular}
+
+
+    
+    Here, one can see that there are four major countries in Africa facing
+the lion share of corporate takeovers. The nations are SA, Nigeria,
+Egypt and Kenya. Between them South Africa has nearly 3 times the number
+of takeovers as the second highest contender, Egypt and it takes the 2nd
+(Egypt),3rd (Nigeria) and 4th (Kenya) contenders to match the number of
+takeovers in South Africa. This seems to reflect a case of distress
+amongst companies in South Africa, that there should be so many targeted
+companies for takeover.
+
+    Now, look at the country specific relation between acquiror and target
+nations. Only nations with 3 or more takeovers are listed.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{group.t.nat.a.nat} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{takeovers} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{group\PYZus{}by}\PY{p}{(}\PY{n}{a.nat}\PY{p}{,}\PY{n}{t.nat}\PY{p}{)} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{summarise}\PY{p}{(}\PY{n}{n}\PY{o}{=}\PY{n+nf}{n}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+\PY{n}{group.t.nat.a.nat} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{group.t.nat.a.nat}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{o}{\PYZdl{}}\PY{n}{n}\PY{p}{,}\PY{n}{decreasing} \PY{o}{=} \PY{k+kc}{TRUE}\PY{p}{)}\PY{p}{,}\PY{p}{]} \PY{o}{\PYZpc{}\PYZgt{}\PYZpc{}} \PY{n+nf}{filter}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZgt{}}\PY{l+m}{2}\PY{p}{)} 
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Acquiror nation\PYZdq{}}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{Target nation\PYZdq{}}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{Tally\PYZdq{}}\PY{p}{)}\PY{p}{;}\PY{n}{group.t.nat.a.nat}
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{a.nat\PYZdq{}}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{t.nat\PYZdq{}}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{n\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+`summarise()` has grouped output by 'a.nat'. You can override using the
+`.groups` argument.
+
+    \end{Verbatim}
+
+    A grouped\_df: 25 × 3
+\begin{tabular}{lll}
+ Acquiror nation & Target nation & Tally\\
+ <chr> & <chr> & <int>\\
+\hline
+	 United States  & South Africa & 17\\
+	 South Africa   & South Africa & 14\\
+	 United Kingdom & South Africa & 11\\
+	 United States  & Kenya        &  7\\
+	 Mauritius      & South Africa &  6\\
+	 United States  & Egypt        &  6\\
+	 France         & South Africa &  5\\
+	 Namibia        & Namibia      &  5\\
+	 South Africa   & Kenya        &  5\\
+	 South Africa   & Mauritius    &  5\\
+	 South Africa   & Nigeria      &  5\\
+	 Utd Arab Em    & Egypt        &  5\\
+	 Hong Kong      & South Africa &  4\\
+	 Mauritius      & Nigeria      &  4\\
+	 United Kingdom & Egypt        &  4\\
+	 United Kingdom & Nigeria      &  4\\
+	 United States  & Nigeria      &  4\\
+	 Australia      & South Africa &  3\\
+	 Canada         & South Africa &  3\\
+	 Egypt          & Egypt        &  3\\
+	 France         & Kenya        &  3\\
+	 France         & Tunisia      &  3\\
+	 Germany        & South Africa &  3\\
+	 Morocco        & Morocco      &  3\\
+	 United Kingdom & Tanzania     &  3\\
+\end{tabular}
+
+
+    
+    \emph{Acquirors}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{acquirors} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{levels}\PY{p}{(}\PY{n+nf}{as.factor}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{o}{\PYZdl{}}\PY{n}{a.nat}\PY{p}{)}\PY{p}{)}\PY{p}{;}\PY{n}{acquirors}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{enumerate*}
+\item 'Australia'
+\item 'Canada'
+\item 'Egypt'
+\item 'France'
+\item 'Germany'
+\item 'Hong Kong'
+\item 'Mauritius'
+\item 'Morocco'
+\item 'Namibia'
+\item 'South Africa'
+\item 'United Kingdom'
+\item 'United States'
+\item 'Utd Arab Em'
+\end{enumerate*}
+
+
+    
+    \emph{Targets}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{targets} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{levels}\PY{p}{(}\PY{n+nf}{as.factor}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{o}{\PYZdl{}}\PY{n}{t.nat}\PY{p}{)}\PY{p}{)}\PY{p}{;}\PY{n}{targets}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{enumerate*}
+\item 'Egypt'
+\item 'Kenya'
+\item 'Mauritius'
+\item 'Morocco'
+\item 'Namibia'
+\item 'Nigeria'
+\item 'South Africa'
+\item 'Tanzania'
+\item 'Tunisia'
+\end{enumerate*}
+
+
+    
+    Now these relationships can be plotted with a directed graph.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{reg} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{ftM2graphNEL}\PY{p}{(}\PY{n}{ft} \PY{o}{=} \PY{n+nf}{as.matrix}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{p}{[}\PY{p}{,}\PY{l+m}{\PYZhy{}3}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{edgemode}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{directed\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The edges of the graph can be numbered, although formatting needs to be
+worked on because the numbers are too small to see in the graph.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ew} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.character}\PY{p}{(}\PY{n}{group.t.nat.a.nat}\PY{o}{\PYZdl{}}\PY{n}{n}\PY{p}{)}
+\PY{n+nf}{names}\PY{p}{(}\PY{n}{ew}\PY{p}{)} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{edgeNames}\PY{p}{(}\PY{n}{reg}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}edgeNames(reg)}
+\PY{n}{eAttrs} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{list}\PY{p}{(}\PY{p}{)}
+\PY{n}{eAttrs}\PY{o}{\PYZdl{}}\PY{n}{label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{ew}
+\PY{n+nf}{plot}\PY{p}{(}\PY{n}{reg}\PY{p}{,}\PY{n}{edgeAttrs}\PY{o}{=}\PY{n}{eAttrs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Due to time constraints the analysis will end here.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
