@@ -9,42 +9,36 @@ class SMSMessage():
         self.text = message_text
         self.cell_num = from_number
 
-    def __str__():
-        pass
-        
+    def __str__(self): #message object reflection
+        print("Seen:", self.seen)
+        print("Message:", self.text)
+        print("From number:",self.cell_num)
+
     def mark_as_read(self):
         self.seen = True
 
-    def show(self):
+    def show(self): #show message
         print(self.text)
         self.mark_as_read()
+
+    def destroy(self):
+        self.seen = null
+        self.text = null
+        self.cell_num = null
                 
-    def receive():
-        pass # do some network stuff here
-
-    def send():
-        pass # do some other network stuff here
-
         
 class SMSMessageList():
     """ A class which holds the SMSMessage objects 
     in a list and functions which act on this list """
     def __init__(self):
-        self.idx = 0
         self.SMS_store = []
-        self.user_choice = "" # this is here because it was in the copied from the students code
 
-    def add(self,sms):
-        """Add a message to the message list"""
-        self.SMS_store.append(sms)
-    
-    def get_count(self):
-        """ Get the length of the list """
-        return len(self.SMS_store)
+    def __str__(self):
+        print("SMS_store", self.SMS_store)
         
-    def get_message(self,idx):# needs fixing ####################
-        """ Returns a message """
-        return self.SMS_store[idx] #
+    def add(self,msg):
+        """Add a message to the message list"""
+        self.SMS_store.append(msg)
     
     def get_unread_messages(self):
         for msg in self.SMS_store:
@@ -52,9 +46,16 @@ class SMSMessageList():
                 pass
             else:
                 msg.show()
+                msg.mark_as_read()
+                
+    def receive():
+        pass # do some network stuff here
 
-    def remove():
-        pass
+    def send():
+        pass # do some other network stuff here
+
+    def destroy(self):
+        self.SMS_store = []
 
  
 class App():
@@ -65,15 +66,13 @@ class App():
         pass
     
     def main():
-        sms_list = SMSMessageList
-        no_1 = SMSMessage("Hello","0798653452")
-        no_2 = SMSMessage("WYD", "0845673864")
-        no_3 = SMSMessage("How are you?", "0631873298")
-        sms_list.add(no_1)
-        sms_list.add(no_2)
-        sms_list.add(no_3)
+        sms_list = SMSMessageList()
+        sms_list.add(SMSMessage("Hello","0798653452"))
+        sms_list.add(SMSMessage("WYD", "0845673864"))
+        sms_list.add(SMSMessage("How are you?", "0631873298"))
 
         sms_list.get_unread_messages()
+        sms_list.destroy()
         
     def read_messages(self):
         self.sms_list.get_unread_messages()
