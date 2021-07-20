@@ -7,7 +7,7 @@ const NUM_CENTROIDS = 3
 struct DataPoint
     x::Float64
     y::Float64
-    centroid::Integer
+    centroid::Int64
 end
 
 struct CentroidParm
@@ -39,26 +39,61 @@ function create_data_array(cpArr::Array{CentroidParm})
 end
 
 data = create_data_array(centroid_param_array)
+matrix = Matrix{Float64}(any,DATAPOINTS) = []
+centroids = Array{Float64,1}(undef,3)
 
-data
 
-x_data = Array{Float64}(undef,DATAPOINTS,1)
-y_data = Array{Float64}(undef,DATAPOINTS,1)
-
-for i in 1:DATAPOINTS
-    x_data[i],y_data[i] = data[i].x, data[i].y
+function extract_data_matrix(dat::Array{DataPoint})
+    mat = Array{Float64}(undef,DATAPOINTS,2)
+    for i in 1:length(data)
+        mat[i,1],mat[i,2] = dat[i].x, dat[i].y
+    end
+    mat
 end
 
-scatter(x_data, y_data,)
+matrix = extract_data_matrix(data)
+#
+# x_data = Array{Float64}(undef,DATAPOINTS,1)
+# y_data = Array{Float64}(undef,DATAPOINTS,1)
+#
+# for i in 1:DATAPOINTS
+#     x_data[i],y_data[i] = data[i].x, data[i].y
+# end
 
+scatter(matrix[:,1],matrix[:,2])
+sample!(matrix,centroids)
 ##############FINISHED###################
+##Works...
+function euclid_distance(centroid::Float64,x::Float64,y::Float64)
+    sqrt((centroid[1] - x)^2 + (centroid[2] - y)^2)
+end
 
-function k-means(iterations::int, num-centroids::int)
-     = sample(num-centroids, data)
 
-    for datum in data
-        for i in 1:len(centroid_arr)
-            dist[i] = distance_measure(datum, centroid_arr[i])
-        end
 
-##########################################
+euclid_distance(solution,matrix)
+
+##Doesnt work
+# function get_distances(centroid_sample::Array{Float64,2}, mat::Array{Float64,2})
+#     dist_betw_centroid_n_datapoint = Array{Float64}(undef,DATAPOINTS,NUM_CENTROIDS)
+#     for i in 1:DATAPOINTS
+#         for j in 1:NUM_CENTROIDS
+#             distances_betw_centroid_datapoints[i,j] = euclid_distance(centroid_sample[j,:], mat[i,1], mat[i,1])
+#         end
+#     end
+#     distance_betw_centroid_datapoints
+# end
+#
+# function k_means(d::Array{DataPoint})
+#     centroids = Array{Float64,2}(undef,3)
+#     m = extract_data_matrix(data)
+#     s = sample!(m,centroids)
+#
+#
+#     distance_array = get_distances(s,m)
+#     distance_array
+# end
+#
+#
+# solution = k_means(data)
+# ##########################################
+# solution
