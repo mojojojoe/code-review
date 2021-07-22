@@ -2,3 +2,4 @@ output
 *~
 .Rproj*
 sectionB/.ipynb_checkpoints/*
+.Rproj.user
