@@ -30,7 +30,6 @@ function datum_generator(cpArr::Array{CentroidParm})
 end
 
 function create_data_array(cpArr::Array{CentroidParm})
-    centroid_no = rand(DiscreteUniform(1,3))
     data = Array{DataPoint}(undef,DATAPOINTS,1)
     for i in 1:DATAPOINTS
         data[i] = datum_generator(cpArr)
@@ -39,8 +38,8 @@ function create_data_array(cpArr::Array{CentroidParm})
 end
 
 data = create_data_array(centroid_param_array)
-matrix = Matrix{Float64}(any,DATAPOINTS) = []
-centroids = Array{Float64,1}(undef,3)
+dp_matrix = Matrix{Float64}(any,DATAPOINTS) = []
+centroid_samples = Array{Float64,1}(undef,3)
 
 
 function extract_data_matrix(dat::Array{DataPoint})
@@ -51,49 +50,100 @@ function extract_data_matrix(dat::Array{DataPoint})
     mat
 end
 
-matrix = extract_data_matrix(data)
-#
-# x_data = Array{Float64}(undef,DATAPOINTS,1)
-# y_data = Array{Float64}(undef,DATAPOINTS,1)
-#
-# for i in 1:DATAPOINTS
-#     x_data[i],y_data[i] = data[i].x, data[i].y
-# end
+dp_matrix = extract_data_matrix(data)
 
-scatter(matrix[:,1],matrix[:,2])
-sample!(matrix,centroids)
-##############FINISHED###################
-##Works...
-function euclid_distance(centroid::Float64,x::Float64,y::Float64)
-    sqrt((centroid[1] - x)^2 + (centroid[2] - y)^2)
+scatter(dp_matrix[:,1],dp_matrix[:,2])
+
+
+function sample_centroids(m::Array{Float64,2})
+    s = Array{Float64}(undef,NUM_CENTROIDS,3)
+    for c in 1:NUM_CENTROIDS
+        i = rand(DiscreteUniform(1,DATAPOINTS))
+        s[c,1],s[c,2],s[c,3] = m[i,1],m[i,2],i
+    end
+    s
+end
+
+
+dp_matrix
+
+centroids = sample_centroids(dp_matrix)
+
+scatter(centroids[1,:],centroids[2,:])
+scatter!(dp_matrix[:,1],dp_matrix[:,2])
+
+##
+function euclid_distances(s::Array{Float64,2},m::Array{Float64,2})
+    dist = Array{Float64}(undef,DATAPOINTS,3)
+    for p in 1:DATAPOINTS
+        for c in 1:NUM_CENTROIDS
+            dist[p,c] = sqrt((s[c,1] - m[p,1])^2 + (s[c,2] - m[p,2])^2)
+        end
+    end
+    dist
+end
+
+distances = euclid_distances(centroids,dp_matrix)
+
+distances
+
+
+## Write a function that takes the distances matrix (100x3) and returns the index (1-3) of each datapoint which has min distance
+
+function min_distances(dist::Array{Float64,2})
+    m = Array{Real}(undef,DATAPOINTS,3)
+    for p in 1:DATAPOINTS
+        m[p,1] = p
+        m[p,2] = argmin(dist[p,:])
+        m[p,3] = minimum(dist[p,:])
+    end
+    m
+end
+
+groups = min_distances(distances)
+
+groups
+
+function update_centroids(g::Array{Real},dp::Array{Float64,2})
+    c = Array{Float64}(undef,NUM_CENTROIDS,3)
+    for p in 1:DATAPOINTS
+        if g[p,3] == 0.0
+            c[g[p,2],1] = dp[g[p,1],1]
+            c[g[p,2],2] = dp[g[p,1],2]
+            c[g[p,2],3] = g[p,1]
+        end
+    end
+    c
 end
 
 
 
-euclid_distance(solution,matrix)
 
-##Doesnt work
-# function get_distances(centroid_sample::Array{Float64,2}, mat::Array{Float64,2})
-#     dist_betw_centroid_n_datapoint = Array{Float64}(undef,DATAPOINTS,NUM_CENTROIDS)
-#     for i in 1:DATAPOINTS
-#         for j in 1:NUM_CENTROIDS
-#             distances_betw_centroid_datapoints[i,j] = euclid_distance(centroid_sample[j,:], mat[i,1], mat[i,1])
-#         end
-#     end
-#     distance_betw_centroid_datapoints
-# end
-#
-# function k_means(d::Array{DataPoint})
-#     centroids = Array{Float64,2}(undef,3)
-#     m = extract_data_matrix(data)
-#     s = sample!(m,centroids)
-#
-#
-#     distance_array = get_distances(s,m)
-#     distance_array
-# end
-#
-#
-# solution = k_means(data)
-# ##########################################
-# solution
+centroids = update_centroids(groups,dp_matrix)
+
+distances = euclid_distances(centroids,dp_matrix)
+groups = min_distances(distances)
+
+
+scatter!(centroids[1,:],centroids[2,:])
+
+function cluster(min_idxs::Array{Real,2})
+    clusters = Array{Float64}(undef,NUM_CENTROIDS,3)
+    for c in 1:NUM_CENTROIDS
+        count = 0
+        S = 0
+        for p in 1:DATAPOINTS
+            if min_idxs[p,1] == c
+                begin
+                    count = count + 1
+                    S = S + min_idxs[p,2]
+                end 
+            end
+           end
+        clusters[c,1],clusters[c,2],clusters[c,3] = S,count,S/count
+        print("\ncluster:",c," S:",S," count:",count," S/count:",S/count)
+    end 
+    clusters
+end
+
+cluster(groups)
