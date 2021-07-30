@@ -2,6 +2,7 @@ using Distributions
 using Plots
 using Random
 using DataFrames
+using DataFramesMeta
 
 const DATAPOINTS = 100
 const NUM_CENTROIDS = 3
@@ -34,8 +35,8 @@ function euclid_distance(c_x::Float64,c_y::Float64,x::Float64,y::Float64)
     sqrt((c_x - x)^2 + (c_y - y)^2)
 end
 
-function make_centroids()
-#Create the centroid points for reference and then create the data points and generate associated information
+function make_centrs()
+"""Create the centre points for reference"""
     ref_centroids = DataFrame()
     for ID in 1:NUM_CENTROIDS
         xp = generate_x_point(ID)
@@ -48,6 +49,7 @@ end
 
 
 function make_data_points()
+"""Create the data points """
     data_points = DataFrame()
     for ID in 1:DATAPOINTS
         lot_draw = rand(DiscreteUniform(1,NUM_CENTROIDS))
@@ -61,31 +63,41 @@ end
 
 
 
-c = make_centroids() # should be run before make_data_points()
-d = make_data_points()
+centres = make_centrs() # should be run before make_data_points()
 
-scatter(c.x,d.y)
+X = make_data_points()
 
-scatter!(d.x,d.y)
+scatter(centres.x,centres.y)
 
-function generate_distances(dp::DataFrame,centr::DataFrame)
+scatter!(X.x,X.y)
+
+function generate_distances(X::DataFrame,centrs::DataFrame)
     dist=Array{Float64}(undef,DATAPOINTS,NUM_CENTROIDS)
     for p in 1:DATAPOINTS
         for c in 1:NUM_CENTROIDS
-            dist[p,c]=euclid_distance(dp[p,:x], dp[p,:y],centr[c,:x],centr[c,:y])
+            dist[p,c]=euclid_distance(X[p,:x], X[p,:y],centrs[c,:x],centrs[c,:y])
         end
     end
     dist
 end         
 
-dists = generate_distances(dp,cents)
+dists = generate_distances(d,c)
 
-function assign_centres_get_distances(dists::Array{Float64,2})
+function assign_clustr(dists::Array{Float64,2})
     assigned = DataFrame()
     for i in 1:DATAPOINTS
-        minid = argmin(dists[i,:])
-        mindist = minimum(dists[i,:])
-        tmp = DataFrame(assig_cent=minid,min_dist=mindist)
+        min_id = argmin(dists[i,:])
+        tmp = DataFrame(centr=min_id)
+        append!(assigned, tmp)
+    end 
+    assigned
+end 
+
+function min_dists(dists::Array{Float64,2})
+    assigned = DataFrame()
+    for i in 1:DATAPOINTS
+        min_dist = minimum(dists[i,:])
+        tmp = DataFrame(mindist=min_dist)
         append!(assigned, tmp)
     end 
     assigned
@@ -95,13 +107,45 @@ end
 ##TODO, GROUP BY CENTROIDS and CALCULATE A METRIC
 ## REITERATE AND RECALCULATE METRIC etc. until METRIC stop going down 
 ##METRIC = SUM OF MIN_DISTS IN GROUP/ NUMBER OF POINTs IN GROUP
-acgd = assign_centres_get_distances(dists)
 
-acd_df = DataFrame(acgd)
+new_centr = assign_centres(dists)
 
-g_acd_df = groupby(acd_df,:assig_cent)
+old_centr = deepcopy(new_centr)
 
-g_acd_nrow = combine(g_acd_df,nrow)
 
-g_acd_sum = combine(g_acd_df, nrow, :min_dist => sum => :sum, :min_dist => mean => :mean)
+while (error != 0)
+    dists = generate_distance(d,c)
+    new_centr = assign_clustr(dists)
+    old_centr = deepcopy(new_centr)
+
+    generate_new_centres(X,clustr)
+end
+
+for CENTR in 1:NUM_CENTROIDS
+    @subset(cent_n_min_dist,:assig_cent .== CENTR) 
+end    
+    
+
+cent_n_min_dist[!.==1,:assig_cent]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
