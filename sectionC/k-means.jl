@@ -4,8 +4,8 @@ using Random
 using DataFrames
 using Chain
 
-const DATAPOINTS = 100
-const NUM_CENTROIDS = 3
+DATAPOINTS = 1000
+NUM_CENTROIDS = 5
 
 function generate_centroid_parms()
     c = Array{Float64}(undef,NUM_CENTROIDS,3)
@@ -18,8 +18,7 @@ function generate_centroid_parms()
 end
 
 function generate_x_point(c::Integer)
-    p = rand(Normal(CENTROID_PARM[c,1],CENTROID_PARM[c,3]))
-    p
+    rand(Normal(CENTROID_PARM[c,1],CENTROID_PARM[c,3]))
 end
 
 function generate_y_point(c::Integer)
@@ -40,7 +39,6 @@ function make_centrs()
     end
     df
 end
-
 
 function make_data_points()
 """Create the data points """
@@ -67,7 +65,7 @@ function generate_distances(X::DataFrame,centrs::DataFrame)
     arr
 end         
 
-function update_clustr(dists::Array{Float64})
+function reprocess_clustrs(dists::Array{Float64})
     assigned = DataFrame()
     for i in 1:DATAPOINTS
         min_id = argmin(dists[i,:])
@@ -76,6 +74,7 @@ function update_clustr(dists::Array{Float64})
     end 
     assigned
 end 
+
 
 function generate_new_centrs(X::DataFrame,clustrs::DataFrame)
     centers = DataFrame(x = X[!,:x], y = X[!,:y], c = clustrs[:,1])
@@ -89,36 +88,38 @@ end
 function get_error(new_centrs::DataFrame,old_centrs::DataFrame)
     sum = 0.0
     for i in 1:NUM_CENTROIDS
-        sum += euclid_distance(new_centrs[i,:x],new_centrs[i,:y],old_centrs[i,:x],old_centrs[i,:y])
+        sum = sum + euclid_distance(new_centrs[i,:x],new_centrs[i,:y],old_centrs[i,:x],old_centrs[i,:y])
     end
     sum
 end
 
-function kmeans()
+function kmeans(num_iterations::Integer)
     centrs = make_centrs() # should be run before make_data_points()
-    new_centrs= deepcopy(centrs)
+    reprocess_centrs = deepcopy(centrs)
     X = make_data_points() 
     dists = generate_distances(X,centrs)
-    clustrs = update_clustr(dists)
-    err = 1.0
-    while (err != 0) begin
-        dists = generate_distances(X,new_centrs)
-        clustrs = update_clustr(dists)
-        old_centrs = deepcopy(new_centrs)
-        new_centrs = generate_new_centrs(X,clustrs)
-        err = get_error(new_centrs,old_centrs)
+    clustrs = reprocess_clustrs(dists)
+    err = 1
+    serr = 0 
+    for i in 0:num_iterations begin
+        dists = generate_distances(X,reprocess_centrs)
+        clustrs = reprocess_clustrs(dists)
+        old_centrs = deepcopy(reprocess_centrs)
+        reprocess_centrs = generate_new_centrs(X,clustrs)
+        err = get_error(reprocess_centrs,old_centrs)
+        serr = serr + err
         end
+        reprocess_centrs,serr
     end
-    [centrs,new_centrs,X] 
+    [centrs,reprocess_centrs,X,clustrs,serr]
 end 
 
 CENTROID_PARM = generate_centroid_parms()
-km = kmeans()
+
+km = kmeans(1000)
 
 scatter(km[1][!,:x],km[1][!,:y])
 
 scatter!(km[2][!,:x],km[2][!,:y])
 
 scatter!(km[3][!,:x],km[3][!,:y])
-
-
