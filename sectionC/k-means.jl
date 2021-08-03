@@ -5,11 +5,13 @@ using DataFrames
 using Chain
 
 DATAPOINTS = 1000
-NUM_CENTROIDS = 5
+CENTROIDS_GIVEN = 5
+
+CENTROIDS_GUESS = 6
 
 function generate_centroid_parms()
-    c = Array{Float64}(undef,NUM_CENTROIDS,3)
-    for i in 1:NUM_CENTROIDS
+    c = Array{Float64}(undef,CENTROIDS_GIVEN,3)
+    for i in 1:CENTROIDS_GIVEN
         c[i,1] = rand(Normal(100,100))
         c[i,2] = rand(Normal(100,100))
         c[i,3] = abs(rand(Cauchy(3,3)))
@@ -29,9 +31,9 @@ function euclid_distance(c_x::Float64,c_y::Float64,x::Float64,y::Float64)
     sqrt((c_x - x)^2 + (c_y - y)^2)
 end
 
-function make_centrs()
+function make_centrs(CENTROID_NUM::Integer)
     df = DataFrame()
-    for ID in 1:NUM_CENTROIDS
+    for ID in 1:CENTROID_NUM
         xp = generate_x_point(ID)
         yp = generate_y_point(ID)
         tmp = DataFrame(c= ID,x = xp, y = yp)
@@ -44,7 +46,7 @@ function make_data_points()
 """Create the data points """
     df = DataFrame()
     for ID in 1:DATAPOINTS
-        lot_draw = rand(DiscreteUniform(1,NUM_CENTROIDS))
+        lot_draw = rand(DiscreteUniform(1,CENTROIDS_GIVEN))
         xp = generate_x_point(lot_draw)
         yp = generate_y_point(lot_draw)
         tmp = DataFrame(x = xp, y = yp)
@@ -54,9 +56,9 @@ function make_data_points()
 end
 
 function generate_distances(X::DataFrame,centrs::DataFrame)
-    arr = Array{Float64}(undef,DATAPOINTS,NUM_CENTROIDS)
+    arr = Array{Float64}(undef,DATAPOINTS,CENTROIDS_GUESS)
     for dp in 1:DATAPOINTS
-        for c in 1:NUM_CENTROIDS
+        for c in 1:CENTROIDS_GUESS
             x1,x2 = X[dp,:x],X[dp,:y]
             c1,c2 = centrs[c,:x],centrs[c,:y]
             arr[dp,c] = euclid_distance(x1,x2,c1,c2) 
@@ -75,7 +77,6 @@ function reprocess_clustrs(dists::Array{Float64})
     assigned
 end 
 
-
 function generate_new_centrs(X::DataFrame,clustrs::DataFrame)
     centers = DataFrame(x = X[!,:x], y = X[!,:y], c = clustrs[:,1])
     r = @chain centers begin
@@ -87,36 +88,37 @@ end
 
 function get_error(new_centrs::DataFrame,old_centrs::DataFrame)
     sum = 0.0
-    for i in 1:NUM_CENTROIDS
+    for i in 1:CENTROIDS_GUESS
         sum = sum + euclid_distance(new_centrs[i,:x],new_centrs[i,:y],old_centrs[i,:x],old_centrs[i,:y])
     end
     sum
 end
 
 function kmeans(num_iterations::Integer)
-    centrs = make_centrs() # should be run before make_data_points()
-    reprocess_centrs = deepcopy(centrs)
+    reprocess_centrs = make_centrs(3)
+    centrs = make_centrs(4) # should be run before make_data_points()
     X = make_data_points() 
     dists = generate_distances(X,centrs)
     clustrs = reprocess_clustrs(dists)
     err = 1
-    serr = 0 
-    for i in 0:num_iterations begin
+    serr = 0
+    for i in 0:num_iterations
         dists = generate_distances(X,reprocess_centrs)
         clustrs = reprocess_clustrs(dists)
         old_centrs = deepcopy(reprocess_centrs)
         reprocess_centrs = generate_new_centrs(X,clustrs)
         err = get_error(reprocess_centrs,old_centrs)
-        serr = serr + err
-        end
-        reprocess_centrs,serr
+        serr += err
+        reprocess_centrs
     end
-    [centrs,reprocess_centrs,X,clustrs,serr]
+    [centrs,reprocess_centrs,X,serr]
 end 
 
 CENTROID_PARM = generate_centroid_parms()
 
-km = kmeans(1000)
+kmeans(5)
+
+km = kmeans(5)
 
 scatter(km[1][!,:x],km[1][!,:y])
 
