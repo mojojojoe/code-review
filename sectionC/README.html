@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>README.html</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+</head>
+
+<body>
+
+<p><strong><em>The docker image</em></strong></p>
+<p>The docker container is available on docker hub. To access the container (assuming you have docker installed)… type,</p>
+<pre><code>docker pull mojojojoe72/code-review:kmeans </code></pre>
+<p>And once the container is downloaded (it’s about 1G), run it with</p>
+<pre><code>docker run -it mojojojoe72/code-review:kmeans</code></pre>
+<p>The docker will boot into Julia with the 5 packages used in the code already installed and precompiled. So that all that is required is to load the code, which is also in the default folder (“/root”) of the container.</p>
+<pre><code>include(&quot;k-means.jl&quot;)</code></pre>
+<p>The ‘k-means.jl’ code is also included in the github repository under ‘sectionC’ along with the Dockerfile used to create the image and a few dependent files.</p>
+<p>Unfortunately, there was an extra step, which involved me first using my native instance of Julia at localhost to download and compile these packages. This process generated large binaries which caused the container to swell in size when included. The files, housed in .julia were added to the container I had generated and then committed and pushed to dockerhub.</p>
+<p>The “k-means.jl’ tries to plot the datapoints. The connection from a remote machine to localhost is blocked in Ubuntu, hence after a long delay an error will be returned after the include(”k-means.jl") directive. However the other variables will have been loaded and and processing can be performed by typing</p>
+<pre><code>kmeans(5)</code></pre>
+<p>The ‘5’ can be any integer and represents the number of iterations that can be performed.</p>
+<p>An array of 4 dataframes are returned. Please see the code.</p>
+<p>Honestly the code is not complete. But I feel like I have given enough time to this project. Hopefully an accurate reflection of my ability and level is to be seen.</p>
+<p>One last thing, julia v1.0.5 is used. The latest (v1.6.2) is problematic with loading the Distributions package.</p>
+
+</body>
+</html>
