@@ -1,4 +1,4 @@
-# Skill assessment for HyperionDev for the purpose of code reviewer #
+# Assessment for HyperionDev #
 
 ---
 
