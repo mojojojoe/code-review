@@ -1,5 +1,4 @@
 #!/usr/bin/env julia
-import Pkg
 
 using Distributions
 using Plots
@@ -7,9 +6,6 @@ using Random
 using DataFrames
 using Chain
 
-DATAPOINTS = 1000
-
-NUM_CENTROIDS = 6
 
 function generate_centroid_parms()
     c = Array{Float64}(undef,NUM_CENTROIDS,3)
@@ -115,15 +111,3 @@ function kmeans(num_iterations::Integer)
     end
     [centrs,reprocess_centrs,X,serr]
 end
-
-CENTROID_PARM = generate_centroid_parms()
-
-kmeans(5)
-
-km = kmeans(5)
-
-scatter(km[1][!,:x],km[1][!,:y])
-
-scatter!(km[2][!,:x],km[2][!,:y])
-
-scatter!(km[3][!,:x],km[3][!,:y])
