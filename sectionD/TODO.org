@@ -1,0 +1,1 @@
+* TODO Redo answer to incorporate heaps and stacks in thinking
