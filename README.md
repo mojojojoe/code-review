@@ -1,11 +1,24 @@
-___Skill assessment for HyperionDev for the purpose of code reviewer___
+# Skill assessment for HyperionDev for the purpose of code reviewer #
+
+---
 
 This assignment is defined in the pdf file "_CoGrammar__2021_Code_Reviewer.pdf"
 
 Briefly, it consists of 4 sections each with an elective. The sections subsequent to section A need to be coded in a language not the same as that chosen in section A.
 
-This submission uses code in Python for section A. R for section B and Julia for section C.
-Section D requires interpretation of Javascript.
+The four sections pertain to 
+
+A. Code review 
+B. Data Analysis 
+C. Implementation of algorithm 
+D. Asymptotic complexity theory
+
+This submission uses code in 
+
+- Python for section A. 
+- R for section B and 
+- Julia for section C.
+- Section D requires interpretation of Javascript.
 
 The assignment was written in Emacs on Ubuntu 20.04. A jupyter notebook was used as was the docker daemon.
 

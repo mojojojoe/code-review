@@ -1,11 +1,13 @@
-___Corporate takeovers in Africa___
+# Corporate takeovers in Africa #
+
+---
 
 The analysis is made of data pertaining to corporate takeovers in Africa between 2016 to middle 2021.
 The data is qualitative, giving the names of companines involved, their sectors and national origins.
 With this information counts per grouping could be made and graph relationships could be drawn.
 
 The Rgraphviz packaged was used to generate the graphviz graphs. Rgraphviz is a bit tricky to load in R version 3.6.3.
-The offical maintainer of Rgraphviz recommends R version 4.1. The jupyter kernel can be found at this website: [https://irkernel.github.io/]
+The offical maintainer of Rgraphviz recommends R version 4.1. The jupyter kernel can be found at the [irkernel website](https://irkernel.github.io/)
 But perhaps a more convenient way to get the kernel is to download this container with the command:
 
 ```
